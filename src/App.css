@@ -6,7 +6,9 @@ body {
   align-items: center;
 
   background: #fafafa;
-  background-image: radial-gradient(#e6e6e6 1px, transparent 0);
+  background-image: radial-gradient(#e6e6e6 2px, transparent 0);
   background-size: 40px 40px;
   background-position: -19px -19px;
+
+  color: #121212;
 }

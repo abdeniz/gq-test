@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import {ChakraProvider} from "@chakra-ui/react";
+import {useState} from "react";
 import styled from "styled-components";
 import "./App.css";
 import Edge from "./Edge";
@@ -10,21 +11,23 @@ function App() {
   const [toComponent, setToComponent] = useState();
 
   return (
-    <Wrapper>
-      <Node
-        label="Course"
-        properties={["title", "id"]}
-        conditions={["id = 0"]}
-        ref={(ref) => setFromComponent(ref)}
-      />
-      <Edge label="uses" transitive />
-      <Node
-        label="Book"
-        properties={["title"]}
-        ref={(ref) => setToComponent(ref)}
-      />
-      <LineTo from={fromComponent} to={toComponent} />
-    </Wrapper>
+    <ChakraProvider>
+      <Wrapper>
+        <Node
+          label="course"
+          properties={["title", "id"]}
+          conditions={["id = 0"]}
+          ref={(ref) => setFromComponent(ref)}
+        />
+        <Edge label="uses" transitive />
+        <Node
+          label="book"
+          properties={["title"]}
+          ref={(ref) => setToComponent(ref)}
+        />
+        <LineTo from={fromComponent} to={toComponent} />
+      </Wrapper>
+    </ChakraProvider>
   );
 }
 

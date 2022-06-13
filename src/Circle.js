@@ -8,6 +8,9 @@ const Circle = styled.div`
   background-color: #ffffff;
   border: 1px solid #efefef;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Circle;

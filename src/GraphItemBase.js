@@ -1,17 +1,55 @@
+import {Button, Popover, PopoverTrigger} from "@chakra-ui/react";
 import React from "react";
 import styled from "styled-components";
 import Circle from "./Circle";
+import EditModal from "./EditModal";
+import EdgeEditModal from "./EdgeEditModal";
 
 const GraphItemBase = React.forwardRef((props, ref) => {
   const {edge, label, properties, conditions} = props;
 
-  console.log(props);
+  console.log(edge);
 
   return (
     <Wrapper>
-      <Circle ref={ref} edge={edge} />
+      <Popover placement="left">
+        <PopoverTrigger>
+          <Circle ref={ref} edge={edge}>
+            {edge ? (
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 8 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0.850586 3.73584C0.574444 3.73584 0.350586 3.9597 0.350586 4.23584C0.350586 4.51198 0.574444 4.73584 0.850586 4.73584V3.73584ZM7.67803 4.58939C7.8733 4.39413 7.8733 4.07755 7.67803 3.88229L4.49605 0.700306C4.30079 0.505044 3.98421 0.505044 3.78895 0.700306C3.59369 0.895568 3.59369 1.21215 3.78895 1.40741L6.61737 4.23584L3.78895 7.06427C3.59369 7.25953 3.59369 7.57611 3.78895 7.77137C3.98421 7.96664 4.30079 7.96664 4.49605 7.77137L7.67803 4.58939ZM0.850586 4.73584H7.32448V3.73584H0.850586V4.73584Z"
+                  fill="#676873"
+                />
+              </svg>
+            ) : (
+              <svg
+                width="14"
+                height="13"
+                viewBox="0 0 14 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="7.08765"
+                  cy="6.30371"
+                  r="5.60596"
+                  stroke="#676873"
+                />
+              </svg>
+            )}
+          </Circle>
+        </PopoverTrigger>
+        {edge ? <EdgeEditModal /> : <EditModal label={label} />}
+      </Popover>
       <Content>
-        <Label>{label}</Label>
+        <Label edge>{label}</Label>
         {properties?.map((property) => (
           <Property>{property}</Property>
         ))}
@@ -39,11 +77,14 @@ const Content = styled.div`
 const Label = styled.h3`
   margin: 0;
   margin-bottom: 4px;
+  font-weight: 600;
 `;
 
 const Property = styled.p`
   margin: 0;
   margin-left: 8px;
+  color: #676873;
+  font-weight: 500;
 `;
 
 const Condition = styled.p`
@@ -51,6 +92,7 @@ const Condition = styled.p`
   font-style: italic;
   font-weight: 300;
   margin-left: 8px;
+  color: #676873;
 `;
 
 export default GraphItemBase;
