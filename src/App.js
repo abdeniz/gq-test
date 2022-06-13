@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import styled from "styled-components";
 import "./App.css";
-import Line from "./Line";
+import Edge from "./Edge";
+import LineTo from "./LineTo";
 import Node from "./Node";
 
 function App() {
@@ -10,9 +11,19 @@ function App() {
 
   return (
     <Wrapper>
-      <Node className="node_1" ref={(ref) => setFromComponent(ref)} />
-      <Node className="node_2" ref={(ref) => setToComponent(ref)} />
-      <Line from={fromComponent} to={toComponent} />
+      <Node
+        label="Course"
+        properties={["title", "id"]}
+        conditions={["id = 0"]}
+        ref={(ref) => setFromComponent(ref)}
+      />
+      <Edge label="uses" transitive />
+      <Node
+        label="Book"
+        properties={["title"]}
+        ref={(ref) => setToComponent(ref)}
+      />
+      <LineTo from={fromComponent} to={toComponent} />
     </Wrapper>
   );
 }

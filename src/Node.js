@@ -1,21 +1,15 @@
 import React from "react";
-import styled from "styled-components";
-import Circle from "./Circle";
+import GraphItemBase from "./GraphItemBase";
 
-const Node = React.forwardRef(({className}, ref) => {
+const Node = React.forwardRef(({label, properties, conditions}, ref) => {
   return (
-    <Wrapper ref={ref} className={className}>
-      <Circle />
-    </Wrapper>
+    <GraphItemBase
+      ref={ref}
+      label={label}
+      properties={properties}
+      conditions={conditions}
+    ></GraphItemBase>
   );
 });
-
-const Wrapper = styled.div`
-  display: flex;
-
-  &:not(:last-of-type) {
-    margin-bottom: 64px;
-  }
-`;
 
 export default Node;
