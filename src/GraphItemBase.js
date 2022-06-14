@@ -1,5 +1,5 @@
 import {Popover, PopoverTrigger} from "@chakra-ui/react";
-import React, {Fragment} from "react";
+import React from "react";
 import styled from "styled-components";
 import Circle from "./Circle";
 import EdgeEditModal from "./EdgeEditModal";
@@ -77,6 +77,7 @@ const GraphItemBase = React.forwardRef(
               nodeIndex={nodeIndex}
               nodes={nodes}
               properties={properties}
+              conditions={conditions}
             />
           )}
         </Popover>
@@ -86,8 +87,8 @@ const GraphItemBase = React.forwardRef(
           {properties?.map((property) => (
             <Property>{property}</Property>
           ))}
-          {conditions?.map((condition) => (
-            <Condition>{condition}</Condition>
+          {conditions?.map(({property, comparison, value}) => (
+            <Condition>{`${property} ${comparison} ${value}`}</Condition>
           ))}
         </Content>
       </Wrapper>

@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonGroup,
+  CloseButton,
   Flex,
   Heading,
   Input,
@@ -12,7 +13,7 @@ import {
   Portal,
   Select,
 } from "@chakra-ui/react";
-import {Fragment, useState} from "react";
+import {useState} from "react";
 import {schema} from "./nodeData";
 
 const EditModal = ({
@@ -50,8 +51,8 @@ const EditModal = ({
     const newNode = nodes.find((_, index) => index === nodeIndex);
     const properties = newNode.properties;
 
-    const availableProperty = nodeSchema.properties.find((property) =>
-      properties.some((elem) => property !== elem)
+    const availableProperty = nodeSchema.properties.find(
+      (schemaProperty) => !properties.includes(schemaProperty)
     );
 
     if (!availableProperty) {
@@ -86,7 +87,88 @@ const EditModal = ({
     setNodes(newNodes);
   };
 
-  const handleAddNewCondition = (comparer) => {};
+  const handleAddNewCondition = (comparison) => {
+    const newCondition = {
+      property: nodeSchema.properties[conditions.length],
+      comparison: comparison,
+      value: "0",
+    };
+
+    const newNode = nodes.find((_, index) => index === nodeIndex);
+    newNode.conditions.push(newCondition);
+
+    const newNodes = nodes.map((node, index) => {
+      if (index === nodeIndex) {
+        return newNode;
+      }
+
+      return node;
+    });
+
+    setNodes(newNodes);
+  };
+
+  const handleEditConditionProperty = (v, index) => {
+    const newNode = nodes.find((_, index) => index === nodeIndex);
+    newNode.conditions[index].property = v.target.value;
+
+    const newNodes = nodes.map((node, index) => {
+      if (index === nodeIndex) {
+        return newNode;
+      }
+
+      return node;
+    });
+
+    setNodes(newNodes);
+  };
+
+  const handleEditConditionValue = (v, index) => {
+    const newNode = nodes.find((_, index) => index === nodeIndex);
+    newNode.conditions[index].value = v.target.value;
+
+    const newNodes = nodes.map((node, index) => {
+      if (index === nodeIndex) {
+        return newNode;
+      }
+
+      return node;
+    });
+
+    setNodes(newNodes);
+  };
+
+  const removeProperty = (propertyIndex) => {
+    const newNode = nodes.find((_, index) => index === nodeIndex);
+    newNode.properties.splice(propertyIndex, 1);
+
+    const newNodes = nodes.map((node, index) => {
+      if (index === nodeIndex) {
+        return newNode;
+      }
+
+      return node;
+    });
+
+    setNodes(newNodes);
+  };
+
+  const removeCondition = (conditionIndex) => {
+    const newNode = nodes.find((_, index) => index === nodeIndex);
+    newNode.conditions.splice(conditionIndex, 1);
+
+    const newNodes = nodes.map((node, index) => {
+      if (index === nodeIndex) {
+        return newNode;
+      }
+
+      return node;
+    });
+
+    setNodes(newNodes);
+  };
+
+  console.log(properties, conditions);
 
   return (
     <Portal>
@@ -130,36 +212,58 @@ const EditModal = ({
                 value={property}
                 onChange={(v) => handleEditProperty(v, index)}
                 maxWidth={200}
+                marginRight={1}
               >
                 {nodeSchema.properties
                   .filter(
                     (schemaProperty) =>
-                      schemaProperty === property ||
-                      !properties.includes(schemaProperty)
+                      !properties.includes(schemaProperty) ||
+                      property === schemaProperty
                   )
                   .map((schemaProperty) => (
                     <option value={schemaProperty}>{schemaProperty}</option>
                   ))}
               </Select>
+              <CloseButton onClick={() => removeProperty(index)} />
             </Flex>
           ))}
-          {/* <Flex
-            justifyContent={"space-between"}
-            alignItems={"center"}
-            marginBottom={4}
-          >
-            <Heading as="h6" size="xs" style={{marginRight: 24}}>
-              condition
-            </Heading>
-            <Select marginRight={2} minWidth={20}>
-              <option value="option2">id</option>
-              <option value="option1">title</option>
-            </Select>
-            <Heading as="h6" size="xs" marginRight={2}>
-              =
-            </Heading>
-            <Input></Input>
-          </Flex> */}
+          {conditions.map(({property, comparison, value}, index) => (
+            <Flex
+              justifyContent={"space-between"}
+              alignItems={"center"}
+              marginBottom={4}
+            >
+              <Heading as="h6" size="xs" style={{marginRight: 24}}>
+                condition
+              </Heading>
+              <Select
+                value={property}
+                marginRight={2}
+                minWidth={20}
+                onChange={(v) => handleEditConditionProperty(v, index)}
+              >
+                {nodeSchema.properties
+                  .filter(
+                    (schemaProperty) =>
+                      !properties.includes(schemaProperty) ||
+                      property === schemaProperty
+                  )
+                  .map((schemaProperty) => (
+                    <option value={schemaProperty}>{schemaProperty}</option>
+                  ))}
+              </Select>
+              <Heading as="h6" size="xs" marginRight={2}>
+                {comparison}
+              </Heading>
+              <Input
+                isRequired
+                value={value}
+                onChange={(v) => handleEditConditionValue(v, index)}
+                marginRight={1}
+              />
+              <CloseButton onClick={() => removeCondition(index)} />
+            </Flex>
+          ))}
           <Flex justifyContent={"space-between"} alignItems={"center"}>
             <ButtonGroup variant="outline" spacing="4" width="100%">
               <Button
@@ -202,6 +306,7 @@ const EditModal = ({
                   onClick={() => {
                     setAddingCondition(true);
                   }}
+                  disabled={conditions?.length >= nodeSchema.properties.length}
                 >
                   add condition
                 </Button>

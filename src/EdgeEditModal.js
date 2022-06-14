@@ -16,7 +16,7 @@ const EditModal = ({label, properties, conditions}) => {
     <Portal>
       <PopoverContent width={400}>
         <PopoverArrow />
-        <PopoverHeader>Edit node query</PopoverHeader>
+        <PopoverHeader>Edit edge query</PopoverHeader>
         <PopoverCloseButton />
         <PopoverBody padding={4}>
           <Flex
